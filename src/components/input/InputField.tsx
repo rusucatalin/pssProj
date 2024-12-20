@@ -1,18 +1,30 @@
 import React from "react";
 
-function InputField(props: {
+interface InputFieldProps {
   id: string;
   label: string;
   extra: string;
   placeholder: string;
   variant: string;
-  state?: string;
+  state?: "error" | "success";
   disabled?: boolean;
   type?: string;
-}) {
-  const { label, id, extra, type, placeholder, variant, state, disabled } =
-    props;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
+const InputField: React.FC<InputFieldProps> = ({
+  id,
+  label,
+  extra,
+  placeholder,
+  variant,
+  state,
+  disabled = false,
+  type = "text",
+  value,
+  onChange,
+}) => {
   return (
     <div className={`${extra}`}>
       <label
@@ -24,12 +36,14 @@ function InputField(props: {
         {label}
       </label>
       <input
-        disabled={disabled}
-        type={type}
         id={id}
+        type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
         className={`mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none ${
-          disabled === true
+          disabled
             ? "!border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]"
             : state === "error"
               ? "border-red-500 text-red-500 placeholder:text-red-500 dark:!border-red-400 dark:!text-red-400 dark:placeholder:!text-red-400"
@@ -40,6 +54,6 @@ function InputField(props: {
       />
     </div>
   );
-}
+};
 
 export default InputField;
