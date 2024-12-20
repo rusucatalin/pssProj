@@ -1,27 +1,29 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signInStart, signInSuccess, signInFailure } from "store/authSlice";
 import { FirebaseServiceFactory } from "services/firebaseServiceFactory";
-
 import InputField from "../../components/input/InputField";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state: any) => state.auth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    dispatch(signInStart());
+
     const authService = FirebaseServiceFactory.getService("auth");
 
     try {
-      setLoading(true);
       const user = await authService.signIn(email, password);
+      sessionStorage.setItem("user", JSON.stringify(user));
+      dispatch(signInSuccess({ uid: user.uid, email }));
       window.location.href = "/home/homePage";
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    } catch (err: any) {
+      dispatch(signInFailure(err.message));
     }
   };
 
@@ -61,10 +63,10 @@ export default function SignIn() {
 
         <button
           onClick={handleSubmit}
-          disabled={loading}
+          disabled={status === "loading"}
           className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {status === "loading" ? "Signing in..." : "Sign In"}
         </button>
 
         <div className="mt-4">
