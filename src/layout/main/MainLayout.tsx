@@ -19,7 +19,7 @@ export default function HomeLayout() {
   return (
     <div>
       <div className="relative flex h-full min-h-screen w-full bg-white dark:bg-gray-800">
-        <div className="w-[250px] bg-gray-800 text-white p-4">
+        <div className="w-[280px] bg-gray-800 text-white p-4">
           <h2 className="text-xl font-semibold mb-6">Home Layout</h2>
           <ul>
             {routes
