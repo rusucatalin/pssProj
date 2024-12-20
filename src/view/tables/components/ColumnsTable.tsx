@@ -14,10 +14,8 @@ type RowObj = {
   coin: string;
   symbol: string;
   price: number;
-  h1: number;
-  h24: number;
-  d7: number;
-  volume24h: number;
+  change_24h: number;
+  volume: number;
   marketCap: number;
 };
 
@@ -31,17 +29,14 @@ function CryptoTable() {
     const getData = async () => {
       try {
         const cryptoData = await fetchCryptoData();
-
         const formattedData: RowObj[] = Object.entries(cryptoData).map(
           ([key, item], index) => ({
             rank: index + 1,
             coin: key,
-            symbol: item.symbol.toUpperCase(),
+            symbol: item.symbol,
             price: item.price,
-            h1: item.change_1h || 0,
-            h24: item.change_24h || 0,
-            d7: item.change_7d || 0,
-            volume24h: item.volume,
+            change_24h: item.change_24h,
+            volume: item.volume,
             marketCap: item.marketCap,
           }),
         );
@@ -63,17 +58,6 @@ function CryptoTable() {
     return `$${num.toLocaleString()}`;
   };
 
-  const formatPercentage = (value: number) => {
-    const formattedValue = Math.abs(value).toFixed(1);
-    const color = value >= 0 ? "text-green-500" : "text-red-500";
-    const arrow = value >= 0 ? "▲" : "▼";
-    return (
-      <span className={color}>
-        {arrow} {formattedValue}%
-      </span>
-    );
-  };
-
   const columns = [
     columnHelper.accessor("rank", {
       id: "rank",
@@ -91,9 +75,9 @@ function CryptoTable() {
               {info.row.original.symbol}
             </span>
           </div>
-          {/* <button className="ml-2 px-3 py-1 text-xs text-green-500 border border-green-500 rounded-full">
+          <button className="ml-2 px-3 py-1 text-xs text-green-500 border border-green-500 rounded-full">
             Buy
-          </button> */}
+          </button>
         </div>
       ),
     }),
@@ -104,13 +88,22 @@ function CryptoTable() {
         <p className="text-sm">{formatNumber(info.getValue())}</p>
       ),
     }),
-    columnHelper.accessor("h24", {
+    columnHelper.accessor("change_24h", {
       id: "24h",
       header: () => <p className="text-sm font-bold">24h</p>,
-      cell: (info) => formatPercentage(info.getValue()),
+      cell: (info) => {
+        const value = info.getValue();
+        return (
+          <p
+            className={`text-sm ${value >= 0 ? "text-green-500" : "text-red-500"}`}
+          >
+            {value >= 0 ? "▲" : "▼"} {Math.abs(value).toFixed(1)}%
+          </p>
+        );
+      },
     }),
-    columnHelper.accessor("volume24h", {
-      id: "volume24h",
+    columnHelper.accessor("volume", {
+      id: "volume",
       header: () => <p className="text-sm font-bold">24h Volume</p>,
       cell: (info) => (
         <p className="text-sm">{formatNumber(info.getValue())}</p>

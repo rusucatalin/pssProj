@@ -1,9 +1,7 @@
 interface CryptoData {
   [key: string]: {
     price: number;
-    change_1h: number;
     change_24h: number;
-    change_7d: number;
     volume: number;
     marketCap: number;
     symbol: string;
@@ -20,11 +18,13 @@ export const fetchCryptoData = async (): Promise<CryptoData> => {
   }
 
   const params = new URLSearchParams({
+    vs_currency: "usd",
     ids: CRYPTO_IDS,
-    vs_currencies: "usd",
-    include_24hr_change: "true",
-    include_market_cap: "true",
-    include_24hr_vol: "true",
+    order: "market_cap_desc",
+    per_page: "20",
+    page: "1",
+    sparkline: "false",
+    price_change_percentage: "24h",
     x_cg_api_key: API_KEY,
   });
 
@@ -37,21 +37,16 @@ export const fetchCryptoData = async (): Promise<CryptoData> => {
 
     const data = await response.json();
 
-    return Object.entries(data).reduce(
-      (acc: CryptoData, [key, value]: [string, any]) => {
-        acc[key] = {
-          price: value.usd,
-          change_1h: 0, // Not available in simple price endpoint
-          change_24h: value.usd_24h_change || 0,
-          change_7d: 0, // Not available in simple price endpoint
-          volume: value.usd_24h_vol || 0,
-          marketCap: value.usd_market_cap || 0,
-          symbol: key.substring(0, 3).toUpperCase(),
-        };
-        return acc;
-      },
-      {},
-    );
+    return data.reduce((acc: CryptoData, item: any) => {
+      acc[item.id] = {
+        price: item.current_price,
+        change_24h: item.price_change_percentage_24h || 0,
+        volume: item.total_volume || 0,
+        marketCap: item.market_cap || 0,
+        symbol: item.symbol.toUpperCase(),
+      };
+      return acc;
+    }, {});
   } catch (error) {
     console.error("Error fetching crypto data:", error);
     throw error;
