@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import { FirebaseServiceFactory } from "services/firebaseServiceFactory";
 import InputField from "../../components/input/InputField";
 
 export default function SignUp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const authService = FirebaseServiceFactory.getService("auth");
+
+    try {
+      setLoading(true);
+      const user = await authService.signUp(email, password);
+      await authService.saveUserData(user.uid, { email, name: "New User" });
+      window.location.href = "/home/homePage";
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="mt-16 mb-16 flex h-full w-full items-center justify-center px-2 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-start">
       <div className="mt-[10vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
@@ -11,16 +39,18 @@ export default function SignUp() {
         <p className="mb-9 ml-1 text-base text-gray-600">
           Enter your details to create your account!
         </p>
-        {/* Email */}
+
         <InputField
           variant="auth"
           extra="mb-3"
           label="Email*"
           placeholder="mail@simmmple.com"
           id="email"
-          type="text"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        {/* Password */}
+
         <InputField
           variant="auth"
           extra="mb-3"
@@ -28,8 +58,10 @@ export default function SignUp() {
           placeholder="Min. 8 characters"
           id="password"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        {/* Confirm Password */}
+
         <InputField
           variant="auth"
           extra="mb-3"
@@ -37,10 +69,20 @@ export default function SignUp() {
           placeholder="Re-enter your password"
           id="confirm-password"
           type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200">
-          Sign Up
+
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
+        >
+          {loading ? "Signing up..." : "Sign Up"}
         </button>
+
         <div className="mt-4">
           <span className="text-sm font-medium text-black-700 dark:text-gray-600">
             Already have an account?
