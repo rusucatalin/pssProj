@@ -1,9 +1,10 @@
 import React from "react";
 
-import { MdLock } from "react-icons/md";
+import { MdBarChart, MdLock } from "react-icons/md";
 import SignUp from "view/auth/SignUp";
 import Home from "view/home/Home";
 import SignIn from "./view/auth/SignIn";
+import DataTables from "view/tables";
 
 const routes = [
   {
@@ -26,6 +27,13 @@ const routes = [
     path: "homePage",
     icon: <MdLock className="h-6 w-6" />,
     component: <Home />,
+  },
+  {
+    name: "Data Tables",
+    layout: "/home",
+    path: "data-tables",
+    icon: <MdBarChart className="h-6 w-6" />,
+    component: <DataTables />,
   },
 ];
 export default routes;
