@@ -43,12 +43,12 @@ export default function HomeLayout() {
           <FixedPlugin />
 
           {/* Main Content Area */}
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-4">
               A
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300">V</p>
-          </div>
+          </div> */}
 
           <Routes>
             {getRoutes(routes)}
