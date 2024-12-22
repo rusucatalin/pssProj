@@ -5,6 +5,7 @@ import SignUp from "view/auth/SignUp";
 import Home from "view/home/Home";
 import SignIn from "./view/auth/SignIn";
 import DataTables from "view/tables";
+import Portfolio from "view/portfolio";
 
 const routes = [
   {
@@ -34,6 +35,13 @@ const routes = [
     path: "data-tables",
     icon: <MdBarChart className="h-6 w-6" />,
     component: <DataTables />,
+  },
+  {
+    name: "Potrfolio",
+    layout: "/home",
+    path: "data-portfolio",
+    icon: <MdBarChart className="h-6 w-6" />,
+    component: <Portfolio />,
   },
 ];
 export default routes;
