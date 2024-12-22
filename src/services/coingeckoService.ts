@@ -1,4 +1,4 @@
-interface CryptoData {
+export interface CryptoData {
   [key: string]: {
     price: number;
     change_24h: number;
