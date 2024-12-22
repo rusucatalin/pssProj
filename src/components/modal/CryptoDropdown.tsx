@@ -1,6 +1,6 @@
 import Dropdown from "components/dropdown";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { AddToPortfolioCommand } from "commands/AddToPortfolioCommand";
 import { RootState } from "store";
 
@@ -14,7 +14,6 @@ const CryptoDropdown: React.FC<CryptoDropdownProps> = ({
   cryptoSymbol,
 }) => {
   const [amount, setAmount] = useState<number>(0);
-  const [open, setOpen] = useState(false);
   const user = useSelector((state: RootState) => state.auth);
 
   const handleAddToPortfolio = async () => {

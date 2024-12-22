@@ -15,9 +15,10 @@ export class AddToPortfolioCommand {
     if (this.userId && this.amount > 0) {
       try {
         await addToPortfolio(this.userId, this.cryptoName, this.amount);
-        alert("Item added to portfolio!");
+        alert("Transaction recorded. Check your portfolio for approved items.");
       } catch (error) {
         console.error("Error adding to portfolio:", error);
+        alert("An error occurred while processing your transaction.");
       }
     } else {
       alert("Please provide a valid amount and make sure you are signed in.");

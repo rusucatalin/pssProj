@@ -1,6 +1,13 @@
 import React from "react";
 
-import { MdBarChart, MdLock, MdNfc, MdPool, MdSell } from "react-icons/md";
+import {
+  MdBarChart,
+  MdLock,
+  MdNfc,
+  MdPool,
+  MdSell,
+  MdSync,
+} from "react-icons/md";
 import SignUp from "view/auth/SignUp";
 import Home from "view/home/Home";
 import SignIn from "./view/auth/SignIn";
@@ -8,6 +15,7 @@ import DataTables from "view/tables";
 import Portfolio from "view/portfolio";
 import Tax from "view/tax";
 import StopLoss from "view/stopLoss/StopLoss";
+import Transaction from "view/transaction";
 
 const routes = [
   {
@@ -58,6 +66,13 @@ const routes = [
     path: "stop-loss",
     icon: <MdSell className="h-6 w-6" />,
     component: <StopLoss />,
+  },
+  {
+    name: "Transactions",
+    layout: "/home",
+    path: "transaction",
+    icon: <MdSync className="h-6 w-6" />,
+    component: <Transaction />,
   },
 ];
 export default routes;
