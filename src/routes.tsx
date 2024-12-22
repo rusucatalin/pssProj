@@ -1,11 +1,12 @@
 import React from "react";
 
-import { MdBarChart, MdLock } from "react-icons/md";
+import { MdBarChart, MdLock, MdNfc } from "react-icons/md";
 import SignUp from "view/auth/SignUp";
 import Home from "view/home/Home";
 import SignIn from "./view/auth/SignIn";
 import DataTables from "view/tables";
 import Portfolio from "view/portfolio";
+import Tax from "view/tax";
 
 const routes = [
   {
@@ -42,6 +43,13 @@ const routes = [
     path: "data-portfolio",
     icon: <MdBarChart className="h-6 w-6" />,
     component: <Portfolio />,
+  },
+  {
+    name: "Tax calculator",
+    layout: "/home",
+    path: "tax-calc",
+    icon: <MdNfc className="h-6 w-6" />,
+    component: <Tax />,
   },
 ];
 export default routes;
