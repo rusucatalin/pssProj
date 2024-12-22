@@ -8,6 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { fetchCryptoData } from "services/coingeckoService";
+import CryptoDropdown from "components/modal/CryptoDropdown";
 
 type RowObj = {
   rank: number;
@@ -75,9 +76,10 @@ function CryptoTable() {
               {info.row.original.symbol}
             </span>
           </div>
-          <button className="ml-2 px-3 py-1 text-xs text-green-500 border border-green-500 rounded-full">
-            Buy
-          </button>
+          <CryptoDropdown
+            cryptoName={info.getValue()}
+            cryptoSymbol={info.row.original.symbol}
+          />
         </div>
       ),
     }),

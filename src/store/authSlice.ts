@@ -8,7 +8,7 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  status: "idle", // Set the initial state to idle
+  status: "idle",
   uid: localStorage.getItem("uid") || null,
   email: localStorage.getItem("email") || null,
   error: null,
