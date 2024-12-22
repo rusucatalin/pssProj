@@ -1,6 +1,10 @@
 import React from "react";
 import { CryptoData } from "services/coingeckoService";
 
+interface ProfitLossStatementProps {
+  cryptoData: CryptoData;
+}
+
 const ProfitLossStatement: React.FC<ProfitLossStatementProps> = ({
   cryptoData,
 }) => {
