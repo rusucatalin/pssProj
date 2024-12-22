@@ -5,7 +5,7 @@ import {
   PercentageStopLossStrategy,
   FixedValueStopLossStrategy,
 } from "utils/StopLossStrategies";
-import StopLossChart from "./components/CryptoChart";
+import StopLossChart from "../stopLoss/components/StopLossChart";
 
 interface StopLossPrices {
   percentage: number;
