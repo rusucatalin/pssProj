@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { fetchCryptoData } from "services/coingeckoService";
 import CryptoDropdown from "components/modal/CryptoDropdown";
+import { EventEmitter } from "events";
 
 type RowObj = {
   rank: number;
@@ -19,7 +20,7 @@ type RowObj = {
   volume: number;
   marketCap: number;
 };
-
+const eventEmitter = new EventEmitter();
 const columnHelper = createColumnHelper<RowObj>();
 
 function CryptoTable() {
@@ -42,15 +43,29 @@ function CryptoTable() {
           }),
         );
 
-        setData(formattedData);
+        eventEmitter.emit("dataFetched", formattedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     getData();
+
     const interval = setInterval(getData, 30000);
+
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleDataFetched = (fetchedData: RowObj[]) => {
+      setData(fetchedData);
+    };
+
+    eventEmitter.on("dataFetched", handleDataFetched);
+
+    return () => {
+      eventEmitter.off("dataFetched", handleDataFetched);
+    };
   }, []);
 
   const formatNumber = (num: number) => {
